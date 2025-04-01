@@ -25,9 +25,9 @@ export const CheckboxFilterGroup = ({
   defaultItems,
   limit = 5,
   searchInputPlaceholder = 'Поиск...',
-  // onChange,
-  // defaultValue,
-}: Props) => {
+}: // onChange,
+// defaultValue,
+Props) => {
   const [showAll, setShowAll] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
   const list = showAll
