@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -112,9 +112,8 @@
   background: rgb(220 14.3% 95.9%);
 } */
 
-dd {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 100px;
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: smooth;
+  }
 }

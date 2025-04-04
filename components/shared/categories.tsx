@@ -30,7 +30,7 @@ export const Categories = ({ className }: Props) => {
       {cats.map((cat) => (
         <a
           key={cat.id}
-          href=""
+          href={`#${cat.name}`}
           className={cn(
             'flex items-center font-bold h-11 rounded-2xl hover:bg-white hover:shadow-md shadow-gray-200 text-primary',
             activeIndex === cat.id &&
