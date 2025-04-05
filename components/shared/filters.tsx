@@ -1,15 +1,25 @@
-﻿import { cn } from '@/lib/utils';
+﻿'use client';
+
+import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
 import { RangeSlider } from '../ui/range-slider';
 import { Title } from '../ui/title';
 import { CheckboxFilterGroup } from './checbox-filter-group';
 import { FilterCheckbox } from './filter-checkbox';
+import { useFelterIngredients } from '../../hooks/useFilterIngredients';
 
 type Props = {
   className?: string;
 };
 
 export const Filters = ({ className }: Props) => {
+  const { ingredients, loading, onAddId, selectedIds } = useFelterIngredients();
+
+  const items = ingredients.map((ingredient) => ({
+    text: ingredient.name,
+    value: String(ingredient.id),
+  }));
+
   return (
     <div className={cn('', className)}>
       <Title size="sm" text="Фильтрация" className="mb-5 font-bold" />
@@ -37,36 +47,15 @@ export const Filters = ({ className }: Props) => {
 
       <CheckboxFilterGroup
         title="Ингредиенты"
-        items={[
-          { text: 'Маленькая', value: 'small' },
-          { text: 'Средняя', value: 'medium' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-          { text: 'Большая', value: 'large' },
-        ]}
-        defaultItems={[
-          { text: 'Маленькая', value: 'small' },
-          { text: 'Маленькая', value: 'small' },
-          { text: 'Маленькая', value: 'small' },
-        ]}
-        limit={3}
+        name="Ингредиенты"
+        items={items}
+        defaultItems={items}
+        limit={5}
+        loading={loading}
         searchInputPlaceholder="Поиск размеров"
         defaultValue="small"
+        onClickChecbox={onAddId}
+        selectedIds={selectedIds}
       />
     </div>
   );

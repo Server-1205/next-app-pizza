@@ -33,9 +33,8 @@ model User {
 }
 
 model Category {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
-  description String
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
   products Product[]
 
@@ -44,11 +43,9 @@ model Category {
 }
 
 model Product {
-  id          Int    @id @default(autoincrement())
-  name        String
-  description String
-  price       Float
-  imageUrl    String
+  id       Int    @id @default(autoincrement())
+  name     String
+  imageUrl String
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
@@ -63,7 +60,7 @@ model Product {
 model ProductItem {
   id Int @id @default(autoincrement())
 
-  price     Float
+  price     Int
   size      Int?
   pizzaType Int?
 
@@ -77,11 +74,11 @@ model ProductItem {
 }
 
 model Ingredient {
-  id          Int    @id @default(autoincrement())
-  name        String
-  description String
-  imageUrl    String
-  price       Float
+  id   Int    @id @default(autoincrement())
+  name String
+
+  imageUrl String
+  price    Int
 
   products   Product[]
   cartItem   CartItem[]

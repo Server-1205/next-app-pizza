@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { ChangeEvent, useState } from 'react';
 import { Input } from '../ui/input';
 import { FilterChecboxProps, FilterCheckbox } from './filter-checkbox';
+import { Skeleton } from '../ui/skeleton';
 
 type Item = FilterChecboxProps;
 
@@ -12,9 +13,12 @@ type Props = {
   title: string;
   items: Item[];
   defaultItems: Item[];
+  loading?: boolean;
   limit: number;
+  name: string;
+  selectedIds: Set<string>;
   searchInputPlaceholder?: string;
-  onChange?: (value: string[]) => void;
+  onClickChecbox?: (id: string) => void;
   defaultValue?: string;
 };
 
@@ -23,13 +27,16 @@ export const CheckboxFilterGroup = ({
   title,
   items,
   defaultItems,
+  loading,
+  name,
   limit = 5,
+  selectedIds,
   searchInputPlaceholder = 'Поиск...',
-}: // onChange,
-// defaultValue,
-Props) => {
+  onClickChecbox,
+}: Props) => {
   const [showAll, setShowAll] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
+
   const list = showAll
     ? items.filter((item) =>
         item.text.toLowerCase().includes(searchValue.toLowerCase())
@@ -39,6 +46,18 @@ Props) => {
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  if (loading) {
+    return (
+      <div className={cn('', className)}>
+        <p className="font-bold mb-3">{title}</p>
+        {...Array(limit)
+          .fill(0)
+          .map((_, index) => <Skeleton key={index} className="h-6 mb-2" />)}
+        <Skeleton className="h-6 mb-2 w-[100px]" />
+      </div>
+    );
+  }
 
   return (
     <div className={cn('', className)}>
@@ -59,8 +78,8 @@ Props) => {
         {list.map((item, index) => (
           <FilterCheckbox
             key={index}
-            onCheckedChange={(ids) => console.log(ids)}
-            checked={false}
+            onCheckedChange={() => onClickChecbox?.(item.value)}
+            checked={selectedIds.has(item.value)}
             value={item.value}
             endAdornment={item.endAdornment}
             text={item.text}
