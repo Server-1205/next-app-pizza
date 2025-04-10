@@ -12,7 +12,7 @@ type Props = {
 
   title: string;
   items: Item[];
-  defaultItems: Item[];
+  defaultItems?: Item[];
   loading?: boolean;
   limit: number;
   name: string;
@@ -41,7 +41,7 @@ export const CheckboxFilterGroup = ({
     ? items.filter((item) =>
         item.text.toLowerCase().includes(searchValue.toLowerCase())
       )
-    : defaultItems.slice(0, limit);
+    : (defaultItems || items).slice(0, limit);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -83,6 +83,7 @@ export const CheckboxFilterGroup = ({
             value={item.value}
             endAdornment={item.endAdornment}
             text={item.text}
+            name={name}
           />
         ))}
       </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import { Categories } from './categories';
 import { Container } from './container';
 import SortPopup from './sort-popup';
+import { Category } from '@prisma/client';
 
 interface Props {
   categories: Category[];

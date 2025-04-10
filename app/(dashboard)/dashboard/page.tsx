@@ -1,9 +1,9 @@
 ﻿import { Container } from '@/components/shared/container';
 
-export default function Loading() {
+export default function Dashboard() {
   return (
     <Container>
-      <div>Loading...</div>
+      <div>dashboard</div>
     </Container>
   );
 }

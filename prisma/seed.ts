@@ -1,10 +1,10 @@
-﻿import { hashSync } from 'bcrypt';
+﻿import { Prisma } from '@prisma/client';
+import { categories, _ingredients, products } from './consts';
 import { prisma } from './prisma-client';
-import { categories, ingredients, products } from './consts';
-import { Prisma } from '@prisma/client';
+import { hashSync } from 'bcrypt';
 
 const randomDecimalNumber = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min) * 10 + min + 10) / 10;
+  return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
 };
 
 const generateProductItem = ({
@@ -21,6 +21,7 @@ const generateProductItem = ({
     price: randomDecimalNumber(190, 600),
     pizzaType,
     size,
+    updatedAt: new Date(), // Добавлено поле updatedAt
   } as Prisma.ProductItemUncheckedCreateInput;
 };
 
@@ -30,14 +31,14 @@ async function up() {
       {
         fullName: 'User Test',
         email: 'user@test.ru',
-        password: hashSync('1111', 10),
+        password: hashSync('111111', 10),
         verefied: new Date(),
         role: 'USER',
       },
       {
         fullName: 'Admin Admin',
-        email: 'admin@admin.ru',
-        password: hashSync('1111', 10),
+        email: 'admin@test.ru',
+        password: hashSync('111111', 10),
         verefied: new Date(),
         role: 'ADMIN',
       },
@@ -48,9 +49,9 @@ async function up() {
     data: categories,
   });
 
-  // await prisma.ingredient.createMany({
-  //   data: ingredients,
-  // });
+  await prisma.ingredient.createMany({
+    data: _ingredients,
+  });
 
   await prisma.product.createMany({
     data: products,
@@ -58,12 +59,12 @@ async function up() {
 
   const pizza1 = await prisma.product.create({
     data: {
-      name: 'Пеперони фреш',
+      name: 'Пепперони фреш',
       imageUrl:
-        'https://media.dodostatic.net/image/r:292x292/11EE7970321044479C1D1085457A36EB.webp',
+        'https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp',
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(0, 5),
+        connect: _ingredients.slice(0, 5),
       },
     },
   });
@@ -72,10 +73,10 @@ async function up() {
     data: {
       name: 'Сырная',
       imageUrl:
-        'https://media.dodostatic.net/image/r:292x292/11EE7970321044479C1D1085457A36EB.webp',
+        'https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(5, 10),
+        connect: _ingredients.slice(5, 10),
       },
     },
   });
@@ -84,10 +85,10 @@ async function up() {
     data: {
       name: 'Чоризо фреш',
       imageUrl:
-        'https://media.dodostatic.net/image/r:292x292/11EE7970321044479C1D1085457A36EB.webp',
+        'https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp',
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
@@ -163,25 +164,28 @@ async function up() {
 async function down() {
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
-  await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`;
 }
 
 async function main() {
   try {
     await down();
     await up();
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e);
   }
 }
 
-main().then(async () => {
-  await prisma.$disconnect().catch(async (e: Error) => {
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
   });
-});
