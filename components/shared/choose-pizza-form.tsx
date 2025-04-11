@@ -1,23 +1,26 @@
-﻿import { cn } from '@/lib/utils';
-import { Title } from '../ui/title';
-import { Button } from '../ui/button';
-import { PizzaImage } from './pizza-image';
-import { GroupVariants } from './group-variants';
-import {
+﻿import {
+  mapPizzaType,
   PizzaSize,
   pizzaSizes,
   PizzaType,
   pizzaTypes,
 } from '@/constants/pizza';
-import { useState } from 'react';
+import { Ingredient as IngredientType, ProductItem } from '@prisma/client';
+import { useEffect, useState } from 'react';
+import { useSet } from 'react-use';
+import { Button } from '../ui/button';
+import { Title } from '../ui/title';
+import { GroupVariants } from './group-variants';
+import { Ingredient } from './ingredient';
+import { PizzaImage } from './pizza-image';
+import { cn } from '@/lib/utils';
 
 interface Props {
   imageUrl: string;
   name: string;
-  ingredients: any[];
-  items: any[];
-
-  onClickAdd?: VoidFunction;
+  ingredients: IngredientType[];
+  items: ProductItem[];
+  onClickAddCard?: VoidFunction;
   className?: string;
 }
 
@@ -27,12 +30,59 @@ export const ChoosePizzaForm = ({
   className,
   ingredients,
   items,
+  onClickAddCard,
 }: Props) => {
   const [size, setSize] = useState<PizzaSize>(20);
   const [type, setType] = useState<PizzaType>(1);
 
-  const textDetails = 'Lorem ipsum dolor sit amet.';
-  const totalPrice = 350;
+  const [selectedIngredients, { toggle: toggleIngredient }] = useSet<number>(
+    new Set([])
+  );
+
+  const pizzaPrice =
+    items.find((item) => item.pizzaType === type && item.size === size)
+      ?.price || 0;
+
+  const totalIngredientsPrice = ingredients
+    .filter((ingredient) => selectedIngredients.has(ingredient.id))
+    .reduce((acc, ingredient) => acc + ingredient.price, 0);
+
+  const totalPrice = pizzaPrice + totalIngredientsPrice;
+  const textDetails = `${size} см ${mapPizzaType[type]} пицца`;
+
+  const hendleClick = () => {
+    onClickAddCard?.();
+    console.log({
+      size,
+      type,
+      ingredients: selectedIngredients,
+    });
+  };
+
+  const availablePizzas = items.filter((item) => item.pizzaType === type);
+
+  const availablePizzaSizes = pizzaSizes.map((item) => ({
+    name: item.name,
+    value: item.value,
+    disabled: !availablePizzas.some(
+      (pizza) => Number(pizza.size) === Number(item.value)
+    ),
+  }));
+
+  useEffect(() => {
+    const isAvailableSize = availablePizzaSizes.find(
+      (item) => Number(item.value) === size && !item.disabled
+    );
+
+    const availableSize = availablePizzaSizes.find((item) => !item.disabled);
+
+    if (!isAvailableSize && availableSize) {
+      setSize(Number(availableSize.value) as PizzaSize);
+    }
+  }, [availablePizzaSizes, size, type]);
+
+  console.log(availablePizzas);
+
   return (
     <div className={cn('flex flex-1', className)}>
       <div
@@ -50,18 +100,38 @@ export const ChoosePizzaForm = ({
         <p className="text-gray-500 mb-2">{textDetails}</p>
 
         <GroupVariants
-          items={pizzaSizes}
+          className="mb-2"
+          items={availablePizzaSizes}
           value={String(size)}
           onClick={(value) => setSize(Number(value) as PizzaSize)}
         />
 
         <GroupVariants
+          className="mb-2"
           items={pizzaTypes}
           value={String(type)}
-          onClick={(value) => setSize(Number(value) as PizzaType)}
+          onClick={(value) => setType(Number(value) as PizzaType)}
         />
 
-        <Button className="h-[55px] px-10 text-base rounded-[18px] w-full">
+        <div className="mt-10 bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar">
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            {ingredients.map((ingredient) => (
+              <Ingredient
+                key={ingredient.id}
+                imageUrl={ingredient.imageUrl}
+                name={ingredient.name}
+                price={ingredient.price}
+                active={selectedIngredients.has(ingredient.id)}
+                onClick={() => toggleIngredient(ingredient.id)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <Button
+          onClick={hendleClick}
+          className="h-[55px] px-10 text-base rounded-[18px] w-full"
+        >
           Добавить в корзину за {totalPrice}
         </Button>
       </div>
