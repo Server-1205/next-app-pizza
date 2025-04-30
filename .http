@@ -1,0 +1,7 @@
+﻿PATCH http://localhost:3000/api/cart/1
+Content-Type: application/json
+Cookie: cartToken=11111
+
+{
+  "quantity": 5
+}
