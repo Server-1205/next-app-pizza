@@ -14,6 +14,10 @@ export const usePizzaOptions = (items: ProductItem[]) => {
 
   const availablePizzaSizes = getAvailablePizzaSizes(type, items);
 
+  const currentItemId = items.find(
+    (item) => item.pizzaType === type && item.size === size
+  )?.id;
+
   useEffect(() => {
     const isAvailableSize = availablePizzaSizes.find(
       (item) => Number(item.value) === size && !item.disabled
@@ -30,6 +34,7 @@ export const usePizzaOptions = (items: ProductItem[]) => {
     size,
     setSize,
     type,
+    currentItemId,
     setType,
     availablePizzaSizes,
     selectedIngredients,

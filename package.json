@@ -40,6 +40,7 @@
     "qs": "^6.14.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
     "react-use": "^17.6.0",
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.2.5",

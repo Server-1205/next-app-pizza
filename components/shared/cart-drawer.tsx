@@ -23,11 +23,17 @@ type Props = PropsWithChildren & {
 };
 
 const CartDraver = ({ className, children }: Props) => {
-  const { fetchCartItems, items, totalAmount, updateItemQuantity } =
-    useCartStore((state) => state);
+  const {
+    fetchCartItems,
+    items,
+    totalAmount,
+    updateItemQuantity,
+    removeCartItem,
+  } = useCartStore((state) => state);
 
   useEffect(() => {
     fetchCartItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClickCountButton = (
@@ -67,6 +73,7 @@ const CartDraver = ({ className, children }: Props) => {
                 onClickCountButton={(type) =>
                   onClickCountButton(item.id, item.quantity, type)
                 }
+                onClickRemove={() => removeCartItem(item.id)}
               />
             ))}
           </div>

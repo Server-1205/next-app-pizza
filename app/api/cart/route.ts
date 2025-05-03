@@ -1,5 +1,9 @@
 ﻿import { prisma } from '@/prisma/prisma-client';
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
+import { findOrCreateCart } from '@/lib/find-or-create-cart';
+import { CreateCartItemValues } from '@/services/dto/cart.dto';
+import { updateCartTotalAmount } from '@/lib/update-cart-total-amount';
 
 export async function GET(reg: NextRequest) {
   try {
@@ -40,4 +44,52 @@ export async function GET(reg: NextRequest) {
   }
 }
 
+export async function POST(req: NextRequest) {
+  try {
+    let token = req.cookies.get('cartToken')?.value;
 
+    if (!token) {
+      token = crypto.randomUUID();
+    }
+
+    const userCart = await findOrCreateCart(token);
+
+    const data = (await req.json()) as CreateCartItemValues;
+
+    const findCartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId: userCart.id,
+        productItemId: data.productItemId,
+        ingredients: { every: { id: { in: data.ingredientsIds } } },
+      },
+    });
+
+    if (findCartItem) {
+      await prisma.cartItem.update({
+        where: {
+          id: findCartItem.id,
+        },
+        data: {
+          quantity: findCartItem.quantity + 1,
+        },
+      });
+    }
+
+    await prisma.cartItem.create({
+      data: {
+        cartId: userCart.id,
+        productItemId: data.productItemId,
+        quantity: 1,
+        ingredients: { connect: data.ingredientsIds?.map((id) => ({ id })) },
+      },
+    });
+
+    const updatedUserCart = await updateCartTotalAmount(token);
+    const response = NextResponse.json(updatedUserCart);
+    response.cookies.set('cartToken', token);
+    return response;
+  } catch (error) {
+    console.error('[CARTADD] Server error', error);
+    return NextResponse.json({ message: 'Не удалось создать корзину' });
+  }
+}

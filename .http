@@ -3,5 +3,5 @@ Content-Type: application/json
 Cookie: cartToken=11111
 
 {
-  "quantity": 5
+  "quantity": 1
 }

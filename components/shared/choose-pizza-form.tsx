@@ -19,7 +19,8 @@ interface Props {
   name: string;
   ingredients: IngredientType[];
   items: ProductItem[];
-  onClickAddCard?: VoidFunction;
+  onSubmit: (itemId: number, ingredients: number[]) => void;
+  loading: boolean;
   className?: string;
 }
 
@@ -29,13 +30,15 @@ export const ChoosePizzaForm = ({
   className,
   ingredients,
   items,
-  onClickAddCard,
+  onSubmit,
+  loading,
 }: Props) => {
   const {
     size,
     setSize,
     type,
     setType,
+    currentItemId,
     availablePizzaSizes,
     selectedIngredients,
     toggleIngredient,
@@ -52,7 +55,9 @@ export const ChoosePizzaForm = ({
   const textDetails = `${size} см ${mapPizzaType[type]} пицца`;
 
   const hendleClick = () => {
-    onClickAddCard?.();
+    if (currentItemId) {
+      onSubmit(currentItemId, Array.from(selectedIngredients));
+    }
     console.log({
       size,
       type,
@@ -106,6 +111,7 @@ export const ChoosePizzaForm = ({
         </div>
 
         <Button
+          loading={loading}
           onClick={hendleClick}
           className="h-[55px] px-10 text-base rounded-[18px] w-full"
         >

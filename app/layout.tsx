@@ -1,4 +1,5 @@
 ﻿import { Nunito } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
 const nunito = Nunito({
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <body className={`${nunito.className}`}>{children}</body>
+      <body className={`${nunito.className}`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

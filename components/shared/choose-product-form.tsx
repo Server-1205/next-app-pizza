@@ -5,14 +5,20 @@ import { Button } from '../ui/button';
 interface Props {
   imageUrl: string;
   name: string;
-
-  onClickAdd?: VoidFunction;
+  price: number;
+  loading: boolean;
+  onSubmit: () => void;
   className?: string;
 }
 
-export const ChooseProductForm = ({ imageUrl, name, className }: Props) => {
-  const textDetails = 'Lorem ipsum dolor sit amet.';
-  const totalPrice = 350;
+export const ChooseProductForm = ({
+  imageUrl,
+  name,
+  price,
+  loading,
+  onSubmit,
+  className,
+}: Props) => {
   return (
     <div className={cn('flex flex-1', className)}>
       <div
@@ -33,10 +39,14 @@ export const ChooseProductForm = ({ imageUrl, name, className }: Props) => {
       <div className="w-[490px] p-7 bg-accent/55">
         <Title text={name} className="font-extrabold mb-1" />
 
-        <p className="text-gray-500 mb-2">{textDetails}</p>
+        <p className="text-gray-500 mb-2">{}</p>
 
-        <Button className="h-[55px] px-10 text-base rounded-[18px] w-full">
-          Добавить в корзину за {totalPrice}
+        <Button
+          loading={loading}
+          onClick={onSubmit}
+          className="h-[55px] px-10 text-base rounded-[18px] w-full"
+        >
+          Добавить в корзину за {price}
         </Button>
       </div>
     </div>

@@ -1,22 +1,23 @@
 ﻿import { cn } from '@/lib/utils';
 import * as CartItem from './cart-item-details';
 import type { CartItemProps } from './cart-item-details/cart-item-details.types';
-import { TrashIcon } from 'lucide-react';
+import { Trash2Icon } from 'lucide-react';
 import { CountButton } from './count-button';
 
 type Props = CartItemProps & {
   onClickCountButton: (type: 'plus' | 'minus') => void;
+  onClickRemove: () => void;
   className?: string;
 };
 
 export const CartDrawerItem = ({
-  // id,
   imageUrl,
   name,
   price,
   quantity,
   details,
   onClickCountButton,
+  onClickRemove,
   className,
 }: Props) => {
   return (
@@ -33,7 +34,8 @@ export const CartDrawerItem = ({
 
           <div className="flex items-center gap-3">
             <CartItem.Price value={price} />
-            <TrashIcon
+            <Trash2Icon
+              onClick={onClickRemove}
               className="text-gray-400 cursor-pointer hover:text-gray-600"
               size={16}
             />
