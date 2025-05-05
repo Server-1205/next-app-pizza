@@ -22,7 +22,7 @@ type Props = PropsWithChildren & {
   className?: string;
 };
 
-const CartDraver = ({ className, children }: Props) => {
+const CartDrawer = ({ className, children }: Props) => {
   const {
     fetchCartItems,
     items,
@@ -103,4 +103,4 @@ const CartDraver = ({ className, children }: Props) => {
   );
 };
 
-export default CartDraver;
+export default CartDrawer;
