@@ -1,0 +1,6 @@
+{
+  "todo-tree.tree.scanMode": "workspace only",
+  "todo-tree.tree.disableCompactFolders": true,
+  "todo-tree.tree.showBadges": false,
+  "todo-tree.tree.showCountsInTree": true
+}

@@ -1,13 +1,13 @@
-﻿import { prisma } from '@/prisma/prisma-client';
-import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
-import { findOrCreateCart } from '@/lib/find-or-create-cart';
-import { CreateCartItemValues } from '@/services/dto/cart.dto';
-import { updateCartTotalAmount } from '@/lib/update-cart-total-amount';
+﻿import { prisma } from "@/prisma/prisma-client";
+import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
+import { findOrCreateCart } from "@/lib/find-or-create-cart";
+import { CreateCartItemValues } from "@/services/dto/cart.dto";
+import { updateCartTotalAmount } from "@/lib/update-cart-total-amount";
 
 export async function GET(reg: NextRequest) {
   try {
-    const token = reg.cookies.get('cartToken')?.value;
+    const token = reg.cookies.get("cartToken")?.value;
 
     if (!token) {
       return NextResponse.json({ totalAmount: 0, items: [] });
@@ -24,7 +24,7 @@ export async function GET(reg: NextRequest) {
       include: {
         items: {
           orderBy: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
           include: {
             productItem: {
@@ -46,7 +46,7 @@ export async function GET(reg: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    let token = req.cookies.get('cartToken')?.value;
+    let token = req.cookies.get("cartToken")?.value;
 
     if (!token) {
       token = crypto.randomUUID();
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       where: {
         cartId: userCart.id,
         productItemId: data.productItemId,
-        ingredients: { every: { id: { in: data.ingredientsIds } } },
+        ingredients: { every: { id: { in: data.ingredients } } },
       },
     });
 
@@ -80,16 +80,16 @@ export async function POST(req: NextRequest) {
         cartId: userCart.id,
         productItemId: data.productItemId,
         quantity: 1,
-        ingredients: { connect: data.ingredientsIds?.map((id) => ({ id })) },
+        ingredients: { connect: data.ingredients?.map((id) => ({ id })) },
       },
     });
 
     const updatedUserCart = await updateCartTotalAmount(token);
     const response = NextResponse.json(updatedUserCart);
-    response.cookies.set('cartToken', token);
+    response.cookies.set("cartToken", token);
     return response;
   } catch (error) {
-    console.error('[CARTADD] Server error', error);
-    return NextResponse.json({ message: 'Не удалось создать корзину' });
+    console.error("[CARTADD] Server error", error);
+    return NextResponse.json({ message: "Не удалось создать корзину" });
   }
 }
