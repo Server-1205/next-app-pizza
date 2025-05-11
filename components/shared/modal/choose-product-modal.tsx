@@ -1,13 +1,13 @@
-﻿'use client';
+﻿"use client";
 
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
-import { ChooseProductForm } from '../choose-product-form';
-import { ProductWithRelations } from '@/@types/prisma';
-import { ChoosePizzaForm } from '../choose-pizza-form';
-import { useCartStore } from '@/store/cart';
-import toast from 'react-hot-toast';
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { ChooseProductForm } from "../choose-product-form";
+import { ProductWithRelations } from "@/@types/prisma";
+import { ChoosePizzaForm } from "../choose-pizza-form";
+import { useCartStore } from "@/store/cart";
+import toast from "react-hot-toast";
 
 interface Props {
   product: ProductWithRelations;
@@ -26,11 +26,11 @@ export const ChooseProductModal = ({ className, product }: Props) => {
       await addCartItem({
         productItemId: firstItem.id,
       });
-      toast.success('Товар добавлена в корзину');
+      toast.success("Товар добавлена в корзину");
       router.back();
     } catch (error) {
       console.error(error);
-      toast.error('Не удалось добавить в корзину');
+      toast.error("Не удалось добавить в корзину");
     }
   };
 
@@ -38,15 +38,15 @@ export const ChooseProductModal = ({ className, product }: Props) => {
     try {
       await addCartItem({
         productItemId,
-        ingredientsIds: ingredients,
+        ingredients: ingredients,
       });
 
       router.back();
 
-      toast.success('Пицца добавлена в корзину');
+      toast.success("Пицца добавлена в корзину");
     } catch (error) {
       console.error(error);
-      toast.error('Не удалось добавить в корзину');
+      toast.error("Не удалось добавить в корзину");
     }
   };
 
@@ -54,7 +54,7 @@ export const ChooseProductModal = ({ className, product }: Props) => {
     <Dialog open={Boolean(product)} onOpenChange={router.back}>
       <DialogContent
         className={cn(
-          'p-0 w-[1060px] max-w-[1060px]  min-h-[500px] bg-white overflow-hidden sm:max-w-[1060px]',
+          "p-0 w-[1060px] max-w-[1060px]  min-h-[500px] bg-white overflow-hidden sm:max-w-[1060px]",
           className
         )}
       >
