@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍕 Next Pizza App
 
-## Getting Started
+Добро пожаловать в **Next Pizza App** — современное веб-приложение для заказа пиццы, созданное с использованием Next.js.
 
-First, run the development server:
+![Pizza App Screenshot](https://placehold.co/600x400?text=Ваш+Скриншот+Здесь)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Особенности (Features)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   Просмотр меню с различными видами пиццы.
+*   Добавление пиццы в корзину.
+*   Оформление заказа.
+*   Современный и адаптивный дизайн.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Технологии (Tech Stack)
 
-To learn more about Next.js, take a look at the following resources:
+*   **Framework**: [Next.js](https://nextjs.org/)
+*   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+*   **UI Components**: [Shadcn/UI](https://ui.shadcn.com/)
+*   **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+*   **Database**: [Prisma](https://www.prisma.io/) (или укажите вашу БД)
+*   **Deployment**: [Vercel](https://vercel.com/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚙️ Как запустить проект локально (Getting Started)
 
-## Deploy on Vercel
+Чтобы запустить копию проекта у себя, следуйте этим простым шагам.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Необходимые условия
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Убедитесь, что у вас установлен Node.js и npm/yarn/pnpm.
+*   `npm`
+    ```sh
+    npm install npm@latest -g
+    ```
+
+### Установка
+
+1.  Клонируйте репозиторий:
+    ```sh
+    git clone https://github.com/Server-1205/next-app-pizza.git
+    ```
+2.  Перейдите в директорию проекта:
+    ```sh
+    cd next-app-pizza
+    ```
+3.  Установите зависимости:
+    ```sh
+    npm install
+    ```
+4.  Создайте файл `.env` в корне проекта и добавьте необходимые переменные окружения (если они есть).
+
+5.  Запустите сервер для разработки:
+    ```sh
+    npm run dev
+    ```
+6.  Откройте [http://localhost:3000](http://localhost:3000) в вашем браузере.
+
+---
+
+## 📄 Лицензия (License)
+
+Распространяется под лицензией MIT. Смотрите `LICENSE` для получения дополнительной информации.
